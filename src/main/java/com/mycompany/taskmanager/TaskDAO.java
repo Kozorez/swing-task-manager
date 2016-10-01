@@ -32,7 +32,7 @@ public class TaskDAO {
                     task.getPriority() + ", " +
                     "'" + task.getArea().name() + "'" +
                     ")";
-            int rows = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
         } catch (SQLException ex) { }
     }
     
@@ -46,7 +46,7 @@ public class TaskDAO {
                     task.getPriority() + ", area = " +
                     "'" + task.getArea().name() + "'" +
                     " where id = " + id;
-            int rows = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
         } catch (SQLException ex) { }
     }
     
@@ -56,7 +56,7 @@ public class TaskDAO {
             
             Statement stmt = connection.createStatement();
             String query = "delete from tasks where id = " + id;
-            int rows = stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
         } catch (SQLException ex) { }
     }
     
