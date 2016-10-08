@@ -1,13 +1,15 @@
 package com.mycompany.taskmanager;
 
 public class Task {
+
     private String name;
     private byte priority;
     private String area;
     private boolean finished;
-    
-    public Task() { }
-    
+
+    public Task() {
+    }
+
     public Task(String name, byte priority, String area, boolean finished) {
         this.name = name;
         this.priority = priority;
@@ -42,9 +44,9 @@ public class Task {
     public void setArea(String area) {
         if (area != null && !area.isEmpty()) {
             this.area = area;
-        } 
+        }
     }
-    
+
     public boolean isFinished() {
         return finished;
     }
