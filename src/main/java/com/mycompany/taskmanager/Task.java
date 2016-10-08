@@ -5,18 +5,21 @@ public class Task {
     private String name;
     private byte priority;
     private String area;
+    private boolean finished;
     
-    public Task(String name, byte priority, String area) {
+    public Task(String name, byte priority, String area, boolean finished) {
         this.name = name;
         this.priority = priority;
         this.area = area;
+        this.finished = finished;
     }
     
-    public Task(int id, String name, byte priority, String area) {
+    public Task(int id, String name, byte priority, String area, boolean finished) {
         this.id = id;
         this.name = name;
         this.priority = priority;
         this.area = area;
+        this.finished = finished;
     }
 
     public int getId() {
@@ -49,5 +52,13 @@ public class Task {
 
     public void setArea(String area) {
         this.area = area;
+    }
+    
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }
