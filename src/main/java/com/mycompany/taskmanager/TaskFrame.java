@@ -88,8 +88,8 @@ public class TaskFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        dao.insertTask(new Task("Something", (byte)5, Area.GENERAL));
-        dao.updateTask(5, new Task("Something more", (byte)9, Area.GENERAL));
+        dao.insertTask(new Task("Something", (byte)5, "General"));
+        dao.updateTask(5, new Task("Something more", (byte)9, "General"));
         dao.deleteTask(7);
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

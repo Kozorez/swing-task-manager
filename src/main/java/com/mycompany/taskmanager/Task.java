@@ -4,15 +4,15 @@ public class Task {
     private int id;
     private String name;
     private byte priority;
-    private Area area;
+    private String area;
     
-    public Task(String name, byte priority, Area area) {
+    public Task(String name, byte priority, String area) {
         this.name = name;
         this.priority = priority;
         this.area = area;
     }
     
-    public Task(int id, String name, byte priority, Area area) {
+    public Task(int id, String name, byte priority, String area) {
         this.id = id;
         this.name = name;
         this.priority = priority;
@@ -43,11 +43,11 @@ public class Task {
         this.priority = priority;
     }
 
-    public Area getArea() {
+    public String getArea() {
         return area;
     }
 
-    public void setArea(Area area) {
+    public void setArea(String area) {
         this.area = area;
     }
 }

@@ -30,7 +30,7 @@ public class TaskDAO {
             String query = "insert into tasks(name, priority, area) values(" + 
                     "'" + task.getName() + "', " +
                     task.getPriority() + ", " +
-                    "'" + task.getArea().name() + "'" +
+                    "'" + task.getArea() + "'" +
                     ")";
             stmt.executeUpdate(query);
         } catch (SQLException ex) { }
@@ -44,7 +44,7 @@ public class TaskDAO {
             String query = "update tasks set name = " + 
                     "'" + task.getName() + "', priority = " +
                     task.getPriority() + ", area = " +
-                    "'" + task.getArea().name() + "'" +
+                    "'" + task.getArea() + "'" +
                     " where id = " + id;
             stmt.executeUpdate(query);
         } catch (SQLException ex) { }
@@ -73,7 +73,7 @@ public class TaskDAO {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 byte priority = rs.getByte("priority");
-                Area area = Area.valueOf(rs.getString("area"));
+                String area = rs.getString("area");
                         
                 Task task = new Task(id, name, priority, area);
                 tasks.add(task);
