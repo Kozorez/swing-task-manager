@@ -1,11 +1,13 @@
 package com.mycompany.taskmanager;
 
 public class Task {
-    private int id;
+    //private int id;
     private String name;
     private byte priority;
     private String area;
     private boolean finished;
+    
+    public Task() { }
     
     public Task(String name, byte priority, String area, boolean finished) {
         this.name = name;
@@ -14,28 +16,30 @@ public class Task {
         this.finished = finished;
     }
     
-    public Task(int id, String name, byte priority, String area, boolean finished) {
-        this.id = id;
-        this.name = name;
-        this.priority = priority;
-        this.area = area;
-        this.finished = finished;
-    }
+//    public Task(int id, String name, byte priority, String area, boolean finished) {
+//        this.id = id;
+//        this.name = name;
+//        this.priority = priority;
+//        this.area = area;
+//        this.finished = finished;
+//    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name != null && !name.isEmpty()) {
+            this.name = name;
+        }
     }
 
     public byte getPriority() {
@@ -43,7 +47,9 @@ public class Task {
     }
 
     public void setPriority(byte priority) {
-        this.priority = priority;
+        if (priority >= 0 && priority <= 10) {
+            this.priority = priority;
+        }
     }
 
     public String getArea() {
@@ -51,7 +57,9 @@ public class Task {
     }
 
     public void setArea(String area) {
-        this.area = area;
+        if (area != null && !area.isEmpty()) {
+            this.area = area;
+        } 
     }
     
     public boolean isFinished() {

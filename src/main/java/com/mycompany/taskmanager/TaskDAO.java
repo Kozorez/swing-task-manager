@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskDAO {
     private Connection connection = null;
@@ -52,18 +52,18 @@ public class TaskDAO {
         } catch (SQLException ex) { }
     }
     
-    public void deleteTask(int id) {
-        try {
-            getConnection();
-            
-            Statement stmt = connection.createStatement();
-            String query = "delete from tasks where id = " + id;
-            stmt.executeUpdate(query);
-        } catch (SQLException ex) { }
-    }
+//    public void deleteTask(int id) {
+//        try {
+//            getConnection();
+//            
+//            Statement stmt = connection.createStatement();
+//            String query = "delete from tasks where id = " + id;
+//            stmt.executeUpdate(query);
+//        } catch (SQLException ex) { }
+//    }
     
-    public List<Task> selectTasks() {
-        List<Task> tasks = new ArrayList<>();
+    public Map<Integer, Task> selectTasks() {
+        Map<Integer, Task> tasks = new HashMap<>();
         try {
             getConnection();
             
@@ -78,11 +78,10 @@ public class TaskDAO {
                 String area = rs.getString("area");
                 boolean finished = rs.getBoolean("is_finished");
                         
-                Task task = new Task(id, name, priority, area, finished);
-                tasks.add(task);
+                Task task = new Task(name, priority, area, finished);
+                tasks.put(id, task);
             }
         } catch (SQLException ex) { }
         return tasks;
     }
-    
 }
