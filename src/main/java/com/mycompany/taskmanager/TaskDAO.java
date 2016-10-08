@@ -52,16 +52,6 @@ public class TaskDAO {
         } catch (SQLException ex) { }
     }
     
-//    public void deleteTask(int id) {
-//        try {
-//            getConnection();
-//            
-//            Statement stmt = connection.createStatement();
-//            String query = "delete from tasks where id = " + id;
-//            stmt.executeUpdate(query);
-//        } catch (SQLException ex) { }
-//    }
-    
     public Map<Integer, Task> selectTasks() {
         Map<Integer, Task> tasks = new HashMap<>();
         try {

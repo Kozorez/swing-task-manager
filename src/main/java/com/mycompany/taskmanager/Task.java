@@ -1,7 +1,6 @@
 package com.mycompany.taskmanager;
 
 public class Task {
-    //private int id;
     private String name;
     private byte priority;
     private String area;
@@ -15,22 +14,6 @@ public class Task {
         this.area = area;
         this.finished = finished;
     }
-    
-//    public Task(int id, String name, byte priority, String area, boolean finished) {
-//        this.id = id;
-//        this.name = name;
-//        this.priority = priority;
-//        this.area = area;
-//        this.finished = finished;
-//    }
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     public String getName() {
         return name;
