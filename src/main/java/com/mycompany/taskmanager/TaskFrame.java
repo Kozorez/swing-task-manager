@@ -30,7 +30,9 @@ public class TaskFrame extends JFrame {
 
         table.removeColumn(table.getColumnModel().getColumn(0));
 
+        dao.startSession();
         generateTable();
+        dao.endSession();
     }
 
     private void generateTable() {
@@ -39,8 +41,8 @@ public class TaskFrame extends JFrame {
         }
 
         Map<Integer, Task> tasks = dao.selectTasks();
-        int rowsCount = tasks.size();
-        Object[][] modelData = new Object[rowsCount][5];
+        
+        Object[][] modelData = new Object[tasks.size()][5];
         int count = 0;
         for (int id : tasks.keySet()) {
             modelData[count][0] = id;
@@ -53,12 +55,8 @@ public class TaskFrame extends JFrame {
         }
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        for (int i = 0; i < rowsCount; i++) {
-            model.addRow(new Object[]{modelData[i][0],
-                modelData[i][1],
-                modelData[i][2],
-                modelData[i][3],
-                modelData[i][4]});
+        for (Object[] task : modelData) {
+            model.addRow(new Object[]{task[0], task[1], task[2], task[3], task[4]});
         }
     }
 
@@ -70,6 +68,7 @@ public class TaskFrame extends JFrame {
         table = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         addRowMenu = new javax.swing.JMenu();
+        deleteTaskMenu = new javax.swing.JMenu();
         saveChangesMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -87,7 +86,7 @@ public class TaskFrame extends JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Byte.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, true, true, true, true
@@ -112,6 +111,14 @@ public class TaskFrame extends JFrame {
         });
         menuBar.add(addRowMenu);
 
+        deleteTaskMenu.setText("Delete Task");
+        deleteTaskMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteTaskMenuMouseClicked(evt);
+            }
+        });
+        menuBar.add(deleteTaskMenu);
+
         saveChangesMenu.setText("Save Changes");
         saveChangesMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -130,7 +137,7 @@ public class TaskFrame extends JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+            .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
         );
 
         pack();
@@ -138,34 +145,61 @@ public class TaskFrame extends JFrame {
 
     private void addRowMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addRowMenuMouseClicked
         if (evt.getButton() == MouseEvent.BUTTON1) {
+            addRowMenu.setSelected(false);
+            
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.addRow(new Object[]{null, null, null, null, false});
-            addRowMenu.setSelected(false);
         }
     }//GEN-LAST:event_addRowMenuMouseClicked
 
     private void saveChangesMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveChangesMenuMouseClicked
         if (evt.getButton() == MouseEvent.BUTTON1) {
             saveChangesMenu.setSelected(false);
+            
+            dao.startSession();
+            
+            Map<Integer, Task> tasks = dao.selectTasks();
+            
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             for (int i = 0; i < model.getRowCount(); i++) {
                 Task task = new Task();
                 task.setName((String) table.getModel().getValueAt(i, 1));
-                task.setPriority((byte) table.getModel().getValueAt(i, 2));
+                task.setPriority((int) table.getModel().getValueAt(i, 2));
                 task.setArea((String) table.getModel().getValueAt(i, 3));
                 task.setFinished((boolean) table.getModel().getValueAt(i, 4));
 
                 if (table.getModel().getValueAt(i, 0) != null) {
                     dao.updateTask((int) table.getModel().getValueAt(i, 0), task);
+                    tasks.remove(table.getModel().getValueAt(i, 0));
                 } else {
                     dao.insertTask(task);
                 }
             }
+            
+            tasks.keySet().stream().forEach((id) -> {
+                dao.deleteTask(id);
+            });
 
             generateTable();
-
+            
+            dao.endSession();
         }
     }//GEN-LAST:event_saveChangesMenuMouseClicked
+
+    private void deleteTaskMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteTaskMenuMouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON1) {
+            addRowMenu.setSelected(false);
+            
+            int[] selectedRows = table.getSelectedRows();
+            int count = selectedRows.length - 1;
+            
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            while (count >= 0) {
+                model.removeRow(selectedRows[count]);
+                count--;
+            }
+        }
+    }//GEN-LAST:event_deleteTaskMenuMouseClicked
 
     public static void main(String args[]) {
         EventQueue.invokeLater(() -> {
@@ -175,6 +209,7 @@ public class TaskFrame extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu addRowMenu;
+    private javax.swing.JMenu deleteTaskMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu saveChangesMenu;
     private javax.swing.JScrollPane scrollPane;

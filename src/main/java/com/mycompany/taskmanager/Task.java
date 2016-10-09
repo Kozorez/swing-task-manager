@@ -3,14 +3,14 @@ package com.mycompany.taskmanager;
 public class Task {
 
     private String name;
-    private byte priority;
+    private int priority;
     private String area;
     private boolean finished;
 
     public Task() {
     }
 
-    public Task(String name, byte priority, String area, boolean finished) {
+    public Task(String name, int priority, String area, boolean finished) {
         this.name = name;
         this.priority = priority;
         this.area = area;
@@ -27,11 +27,11 @@ public class Task {
         }
     }
 
-    public byte getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(byte priority) {
+    public void setPriority(int priority) {
         if (priority >= 0 && priority <= 10) {
             this.priority = priority;
         }

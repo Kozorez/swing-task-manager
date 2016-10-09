@@ -9,44 +9,80 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
+// TODO cache of tasks
+// TODO password hiding
+
 public class TaskDAO {
 
     private Connection connection;
     private Statement statement;
 
-    private void getConnection() {
+    public void startSession() {
         try {
+            String password = JOptionPane.showInputDialog("Enter your password");
+
+            if (password == null) {
+                System.exit(0);
+            }
+
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://127.0.0.1:5432/task_manager",
+                    "viktor",
+                    password);
+
             if (connection == null) {
-                String password = JOptionPane.showInputDialog("Input your password");
-                
-                if (password == null) {
-                    System.exit(0);
-                }
-                
-                connection = DriverManager.getConnection(
-                        "jdbc:postgresql://127.0.0.1:5432/task_manager",
-                        "viktor",
-                        password);
+                startSession();
+            }
+            
+            statement = connection.createStatement();
+        } catch (SQLException ex) {
+        }
+    }
+    
+    public void endSession() {
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         } catch (SQLException ex) {
         }
-
-        if (connection == null) {
-            getConnection();
-        }
     }
+    
+    public Map<Integer, Task> selectTasks() {
+        Map<Integer, Task> tasks = new HashMap<>();
 
+        try {
+            String query = "select * from tasks";
+            
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int priority = resultSet.getInt("priority");
+                String area = resultSet.getString("area");
+                boolean finished = resultSet.getBoolean("is_finished");
+
+                Task task = new Task(name, priority, area, finished);
+                tasks.put(id, task);
+            }
+        } catch (SQLException ex) {
+        }
+        
+        return tasks;
+    }
+    
     public void insertTask(Task task) {
         try {
-            getConnection();
-
-            statement = connection.createStatement();
             String query = "insert into tasks(name, priority, area, is_finished) values("
                     + "'" + task.getName() + "', "
                     + task.getPriority() + ", "
                     + "'" + task.getArea() + "', "
                     + task.isFinished()
                     + ")";
+            
             statement.executeUpdate(query);
         } catch (SQLException ex) {
         }
@@ -54,41 +90,24 @@ public class TaskDAO {
 
     public void updateTask(int id, Task task) {
         try {
-            getConnection();
-
-            statement = connection.createStatement();
-            String query = "update tasks set name = "
-                    + "'" + task.getName() + "', priority = "
-                    + task.getPriority() + ", area = "
-                    + "'" + task.getArea() + "', is_finished = "
-                    + task.isFinished()
-                    + " where id = " + id;
+            String query = "update tasks set "
+                    + "name = " + "'" + task.getName() + "', "
+                    + "priority = " + task.getPriority() + ", "
+                    + "area = " + "'" + task.getArea() + "', "
+                    + "is_finished = " + task.isFinished() + " "
+                    + "where id = " + id;
+            
             statement.executeUpdate(query);
         } catch (SQLException ex) {
         }
     }
 
-    public Map<Integer, Task> selectTasks() {
-        Map<Integer, Task> tasks = new HashMap<>();
-
+    public void deleteTask(int id) {
         try {
-            getConnection();
-
-            statement = connection.createStatement();
-            String query = "select * from tasks";
-            ResultSet rs = statement.executeQuery(query);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                byte priority = rs.getByte("priority");
-                String area = rs.getString("area");
-                boolean finished = rs.getBoolean("is_finished");
-
-                Task task = new Task(name, priority, area, finished);
-                tasks.put(id, task);
-            }
+            String query = "delete from tasks where id = " + id;
+            
+            statement.executeUpdate(query);
         } catch (SQLException ex) {
         }
-        return tasks;
     }
 }
