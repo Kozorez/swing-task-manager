@@ -7,38 +7,38 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JOptionPane;
 
-// TODO cache of tasks
-// TODO password hiding
-
+// TODO implement cache of tasks
+// TODO robustness checking
+// TODO finish project
 public class TaskDAO {
+
+    private final Authenticator authenticator;
 
     private Connection connection;
     private Statement statement;
 
+    public TaskDAO(Authenticator authenticator) {
+        this.authenticator = authenticator;
+    }
+
     public void startSession() {
         try {
-            String password = JOptionPane.showInputDialog("Enter your password");
-
-            if (password == null) {
-                System.exit(0);
-            }
+            String password = authenticator.authenticate();
 
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://127.0.0.1:5432/task_manager",
                     "viktor",
                     password);
 
+            statement = connection.createStatement();
+        } catch (SQLException ex) {
             if (connection == null) {
                 startSession();
             }
-            
-            statement = connection.createStatement();
-        } catch (SQLException ex) {
         }
     }
-    
+
     public void endSession() {
         try {
             if (statement != null) {
@@ -50,13 +50,13 @@ public class TaskDAO {
         } catch (SQLException ex) {
         }
     }
-    
+
     public Map<Integer, Task> selectTasks() {
         Map<Integer, Task> tasks = new HashMap<>();
 
         try {
             String query = "select * from tasks";
-            
+
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -70,10 +70,10 @@ public class TaskDAO {
             }
         } catch (SQLException ex) {
         }
-        
+
         return tasks;
     }
-    
+
     public void insertTask(Task task) {
         try {
             String query = "insert into tasks(name, priority, area, is_finished) values("
@@ -82,7 +82,7 @@ public class TaskDAO {
                     + "'" + task.getArea() + "', "
                     + task.isFinished()
                     + ")";
-            
+
             statement.executeUpdate(query);
         } catch (SQLException ex) {
         }
@@ -96,7 +96,7 @@ public class TaskDAO {
                     + "area = " + "'" + task.getArea() + "', "
                     + "is_finished = " + task.isFinished() + " "
                     + "where id = " + id;
-            
+
             statement.executeUpdate(query);
         } catch (SQLException ex) {
         }
@@ -105,7 +105,7 @@ public class TaskDAO {
     public void deleteTask(int id) {
         try {
             String query = "delete from tasks where id = " + id;
-            
+
             statement.executeUpdate(query);
         } catch (SQLException ex) {
         }

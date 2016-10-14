@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class TaskFrame extends JFrame {
 
-    private static TaskDAO dao = new TaskDAO();
+    private static final TaskDAO dao = new TaskDAO(SwingAuthenticator.getInstance());
 
     public TaskFrame() {
         try {
