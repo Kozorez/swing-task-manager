@@ -8,9 +8,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO implement cache of tasks
-// TODO robustness checking
-// TODO finish project
 public class TaskDAO {
 
     private final Authenticator authenticator;
@@ -62,10 +59,10 @@ public class TaskDAO {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 int priority = resultSet.getInt("priority");
-                String area = resultSet.getString("area");
+                String category = resultSet.getString("category");
                 boolean finished = resultSet.getBoolean("is_finished");
 
-                Task task = new Task(name, priority, area, finished);
+                Task task = new Task(name, priority, category, finished);
                 tasks.put(id, task);
             }
         } catch (SQLException ex) {
@@ -76,10 +73,10 @@ public class TaskDAO {
 
     public void insertTask(Task task) {
         try {
-            String query = "insert into tasks(name, priority, area, is_finished) values("
+            String query = "insert into tasks(name, priority, category, is_finished) values("
                     + "'" + task.getName() + "', "
                     + task.getPriority() + ", "
-                    + "'" + task.getArea() + "', "
+                    + "'" + task.getCategory() + "', "
                     + task.isFinished()
                     + ")";
 
@@ -93,7 +90,7 @@ public class TaskDAO {
             String query = "update tasks set "
                     + "name = " + "'" + task.getName() + "', "
                     + "priority = " + task.getPriority() + ", "
-                    + "area = " + "'" + task.getArea() + "', "
+                    + "category = " + "'" + task.getCategory() + "', "
                     + "is_finished = " + task.isFinished() + " "
                     + "where id = " + id;
 

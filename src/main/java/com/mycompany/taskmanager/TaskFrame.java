@@ -48,7 +48,7 @@ public class TaskFrame extends JFrame {
             modelData[count][0] = id;
             modelData[count][1] = tasks.get(id).getName();
             modelData[count][2] = tasks.get(id).getPriority();
-            modelData[count][3] = tasks.get(id).getArea();
+            modelData[count][3] = tasks.get(id).getCategory();
             modelData[count][4] = tasks.get(id).isFinished();
 
             count++;
@@ -82,7 +82,7 @@ public class TaskFrame extends JFrame {
 
             },
             new String [] {
-                "Id", "Name", "Priority", "Area", "Is Finished"
+                "Id", "Name", "Priority", "Category", "Is Finished"
             }
         ) {
             Class[] types = new Class [] {
@@ -165,7 +165,7 @@ public class TaskFrame extends JFrame {
                 Task task = new Task();
                 task.setName((String) table.getModel().getValueAt(i, 1));
                 task.setPriority((int) table.getModel().getValueAt(i, 2));
-                task.setArea((String) table.getModel().getValueAt(i, 3));
+                task.setCategory((String) table.getModel().getValueAt(i, 3));
                 task.setFinished((boolean) table.getModel().getValueAt(i, 4));
 
                 if (table.getModel().getValueAt(i, 0) != null) {

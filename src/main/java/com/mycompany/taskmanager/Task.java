@@ -4,7 +4,7 @@ public class Task {
 
     private String name;
     private int priority;
-    private String area;
+    private String category;
     private boolean finished;
 
     public Task() {
@@ -13,7 +13,7 @@ public class Task {
     public Task(String name, int priority, String area, boolean finished) {
         this.name = name;
         this.priority = priority;
-        this.area = area;
+        this.category = area;
         this.finished = finished;
     }
 
@@ -37,13 +37,13 @@ public class Task {
         }
     }
 
-    public String getArea() {
-        return area;
+    public String getCategory() {
+        return category;
     }
 
-    public void setArea(String area) {
-        if (area != null && !area.isEmpty()) {
-            this.area = area;
+    public void setCategory(String category) {
+        if (category != null && !category.isEmpty()) {
+            this.category = category;
         }
     }
 

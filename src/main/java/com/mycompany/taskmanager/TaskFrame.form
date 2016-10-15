@@ -84,7 +84,7 @@
                 <Column editable="false" title="Id" type="java.lang.Integer"/>
                 <Column editable="true" title="Name" type="java.lang.String"/>
                 <Column editable="true" title="Priority" type="java.lang.Integer"/>
-                <Column editable="true" title="Area" type="java.lang.String"/>
+                <Column editable="true" title="Category" type="java.lang.String"/>
                 <Column editable="true" title="Is Finished" type="java.lang.Boolean"/>
               </Table>
             </Property>
